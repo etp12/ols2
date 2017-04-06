@@ -1,6 +1,8 @@
 const Discord = require('discord.js');
 const bot = new Discord.Client();
-const lib = require('./lib');
+
+const Player = require('../lib/Player');
+const Team = require('../lib/Team');
 
 bot.on('message', msg => {
 
