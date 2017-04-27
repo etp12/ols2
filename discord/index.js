@@ -1,7 +1,13 @@
 const Discord = require('discord.js');
 const bot = new Discord.Client();
 const config = require('config.json')('config.json');
-const lib = require('./lib');
+const mongoose = require('mongoose');
+
+const User = require('../lib/User');
+const Team = require('../lib/Team');
+const Player = require('../lib/Player');
+
+mongoose.connect(config.mongodbUri);
 
 bot.on('message', msg => {
 
@@ -30,7 +36,7 @@ bot.on('message', msg => {
 			const isAdmin = (args[2] == 'true');
 			const username = args[3];
 
-			lib.createUser(isOwner, isPlayer, isAdmin, username, function(returnMsg) {
+			User.createUser(isOwner, isPlayer, isAdmin, username, function(returnMsg) {
 				msg.channel.sendMessage(returnMsg);
 			});
 
@@ -45,7 +51,7 @@ bot.on('message', msg => {
 			const ign = args[1];
 			const elo = parseInt(args[2]);
 
-			lib.createPlayer(username, ign, elo, function(returnMsg) {
+			Player.createPlayer(username, ign, elo, function(returnMsg) {
 				msg.channel.sendMessage(returnMsg);
 			});
 
@@ -60,7 +66,7 @@ bot.on('message', msg => {
 			const name = args[0];
 			const ign = args[1];
 
-			lib.createTeam(name, ign, function(returnMsg) {
+			Team.createTeam(name, ign, function(returnMsg) {
 				msg.channel.sendMessage(returnMsg);
 			});
 		}
@@ -73,7 +79,7 @@ bot.on('message', msg => {
 		else {
 			const teamName = args[0];
 
-			lib.listPlayers(teamName, function(returnMsg) {
+			Team.listPlayers(teamName, function(returnMsg) {
 				msg.channel.sendMessage(returnMsg);
 			});
 		}
@@ -87,7 +93,7 @@ bot.on('message', msg => {
 			const username = args[0];
 			const teamName = args[1];
 
-			lib.setUserTeam(username, teamName, function(returnMsg) {
+			User.setUserTeam(username, teamName, function(returnMsg) {
 				msg.channel.sendMessage(returnMsg);
 			});
 		}
@@ -101,7 +107,7 @@ bot.on('message', msg => {
 			const playerName = args[0];
 			const teamName = args[1];
 
-			lib.addPlayerToTeam(playerName, teamName, function(returnMsg) {
+			Team.addPlayerToTeam(playerName, teamName, function(returnMsg) {
 				msg.channel.sendMessage(returnMsg);
 			});
 		}
